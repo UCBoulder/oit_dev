@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Initiate dev site.
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function oit_dev_install() {
+  $user_list = [
+    'therealmeeseeks',
+    'therealscaryterry',
+    'therealbutterrobot',
+    'therealjerry',
+    'therealbeth',
+    'therealmorty',
+    'therealrick',
+  ];
+  $miles = user_load_by_name('france');
+  $affl = $miles->get('field_service_meow_affiliations')->getValue()[1]['value'];
+  $dept = $miles->get('field_user_department')->getValue()[0]['value'];
+  $uuid = $miles->get('field_service_meow_uuid')->getValue()[0]['value'];
+  $sys_id = $miles->get('field_service_meow_sys_id')->getValue()[0]['value'];
+  $dept_id = $miles->get('field_service_meow_department_id')->getValue()[0]['value'];
+  $pod_group = $miles->get('field_service_meow_dds_pod_group')->getValue()[0]['value'];
+  foreach ($user_list as $user) {
+    $this_user = user_load_by_name($user);
+    $this_user->set('field_user_name', $user);
+    $this_user->set('field_service_meow_affiliations', $affl);
+    $this_user->set('field_user_department', $dept);
+    $this_user->set('field_service_meow_uuid', $uuid);
+    $this_user->set('field_service_meow_sys_id', $sys_id);
+    $this_user->set('field_service_meow_department_id', $dept_id);
+    $this_user->set('field_service_meow_dds_pod_group', $pod_group);
+    $this_user->save();
+  }
+}

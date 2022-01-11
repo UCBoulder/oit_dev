@@ -1,0 +1,5 @@
+name: 'oit_dev'
+type: module
+description: ''
+core: 9.x
+package: 'Development'
