@@ -1,5 +1,5 @@
 name: 'oit_dev'
 type: module
 description: ''
-core: 9.x
+core: 8.x
 package: 'Development'
