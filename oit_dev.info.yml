@@ -2,4 +2,5 @@ name: 'oit_dev'
 type: module
 description: ''
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: 'Development'
