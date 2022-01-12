@@ -5,6 +5,7 @@
  * Initiate dev site.
  */
 
+use Drupal\servicenow\Plugin\ServicenowUserLookup;
 
 /**
  * Implements hook_install().
@@ -20,6 +21,7 @@ function oit_dev_install() {
     'therealrick',
   ];
   $miles = user_load_by_name('france');
+  new ServicenowUserLookup($miles);
   $affl = $miles->get('field_service_meow_affiliations')->getValue()[1]['value'];
   $dept = $miles->get('field_user_department')->getValue()[0]['value'];
   $uuid = $miles->get('field_service_meow_uuid')->getValue()[0]['value'];
