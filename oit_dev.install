@@ -19,6 +19,7 @@ function oit_dev_install() {
     'therealbeth',
     'therealmorty',
     'therealrick',
+    'theRealSummer',
   ];
   $miles = user_load_by_name('france');
   new ServicenowUserLookup($miles);
