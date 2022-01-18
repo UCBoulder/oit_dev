@@ -61,11 +61,5 @@ function oit_dev_install() {
  * Implements hook_uninstall().
  */
 function oit_dev_uninstall() {
-  $file_pointer = "../add-to-robots.txt";
-  // Remove add-to-robots.txt after usage.
-  if (!unlink($file_pointer)) {
-    echo ("$file_pointer cannot be deleted due to an error");
-  } else {
-    echo ("$file_pointer has been deleted");
-  }
+  unlink("../add-to-robots.txt");
 }
