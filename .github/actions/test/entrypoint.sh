@@ -3,8 +3,8 @@
 # Fail on error
 set -e
 
-echo "--------- Directory looking /root/drupal/composer/vendor/bin -------------"
-ls -al /root/drupal/composer/vendor/bin
+echo "--------- Directory looking /root -------------"
+ls -al /root/
 echo "--------- /Directory looking -------------"
 composer validate
 composer global require drupal/coder
