@@ -3,12 +3,12 @@
 # Fail on error
 set -e
 
-echo "--------- Directory looking / -------------"
-ls -al /
-echo "--------- Directory looking /home-------------"
-ls -al /home
-echo "--------- Directory looking /root-------------"
-ls -al /root
+echo "--------- Directory looking /root/.config -------------"
+ls -al /root/.config
+echo "--------- Directory looking /root/.config/composer -------------"
+ls -al /root/.config/composer
+echo "--------- Directory looking /root/.config/composer/vendor/bin -------------"
+ls -al /root/.config/composer/vendor/bin
 echo "--------- /Directory looking -------------"
 composer validate
 composer global require drupal/coder
