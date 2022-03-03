@@ -3,7 +3,6 @@
 # Fail on error
 set -e
 
-composer require dealerdirect/phpcodesniffer-composer-installer ^0.7.0
-composer require drupal/coder
+composer require drupal/coder ^8.3
 ls vendor/bin
 vendor/bin/phpcs --standard=Drupal,DrupalPractice ./
