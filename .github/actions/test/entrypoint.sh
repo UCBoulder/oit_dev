@@ -3,6 +3,9 @@
 # Fail on error
 set -e
 
+echo "--------- Directory looking -------------"
+ls /home
+echo "--------- /Directory looking -------------"
 composer validate
 composer global require drupal/coder
 composer global require overtrue/phplint
