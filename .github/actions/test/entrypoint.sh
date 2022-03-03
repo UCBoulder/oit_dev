@@ -4,7 +4,7 @@
 set -e
 
 echo "--------- Directory looking -------------"
-ls /home
+ls -al /
 echo "--------- /Directory looking -------------"
 composer validate
 composer global require drupal/coder
