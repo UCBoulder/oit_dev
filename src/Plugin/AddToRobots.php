@@ -2,18 +2,29 @@
 
 namespace Drupal\oit_dev\Plugin;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+
 /**
  * Create file to add to robots.txt.
  */
 class AddToRobots {
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Function to pull in archived news to add to add to robots.txt.
    */
-  public function __construct() {
-    $news_archive = \Drupal::entityQuery('node');
-    $news_archive->condition('field_news_archive', 3);
-    $news_results = $news_archive->execute();
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
+    $node = $this->entityTypeManager->getStorage('node');
+    $query = $node->getQuery();
+    $query->condition('field_news_archive', 3);
+    $news_results = $query->execute();
     $news_archive_string = "# Paths OIT\n";
     $news_archive_string .= "Disallow: /taxonomy/term/*\n";
     $news_archive_string .= "Disallow: /node?page=*\n";
@@ -24,7 +35,7 @@ class AddToRobots {
     foreach ($news_results as $news_result) {
       $news_archive_string .= "Disallow: /node/$news_result\n";
     }
-    file_put_contents('../add-to-robots.txt', $news_archive_string);
+    file_put_contents('../blt/assets/robots.append.txt', $news_archive_string);
     return 'Created maybe';
   }
 
