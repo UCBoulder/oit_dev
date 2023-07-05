@@ -40,7 +40,7 @@ function oit_dev_install() {
     $this_user->save();
   }
   // Pull in archived news to add to add to robots.txt.
-  new AddToRobots();
+  \Drupal::service('oit_dev.robots');
 }
 
 /**

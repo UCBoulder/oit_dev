@@ -24,6 +24,7 @@ class AddToRobots {
     $node = $this->entityTypeManager->getStorage('node');
     $query = $node->getQuery();
     $query->condition('field_news_archive', 3);
+    $query->accessCheck(FALSE);
     $news_results = $query->execute();
     $news_archive_string = "# Paths OIT\n";
     $news_archive_string .= "Disallow: /taxonomy/term/*\n";
