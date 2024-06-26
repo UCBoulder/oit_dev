@@ -32,6 +32,9 @@ class AddToRobots {
     $news_archive_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=2\n";
     $news_archive_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=3\n";
     $news_archive_string .= "Disallow: /it-security/email-phishing/*\n";
+    $news_archive_string .= "Disallow: /services/search\n";
+    $news_archive_string .= "Disallow: /tutorial/search\n\n";
+
     $news_archive_string .= "# Archived news nodes\n";
     foreach ($news_results as $news_result) {
       $news_archive_string .= "Disallow: /node/$news_result\n";
