@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Initiate dev site.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function oit_dev_install() :void {
+  $user_list = [
+    'therealmeeseeks',
+    'therealscaryterry',
+    'therealbutterrobot',
+    'therealjerry',
+    'therealbeth',
+    'therealmorty',
+    'therealrick',
+    'theRealSummer',
+  ];
+
+  $account = \Drupal::entityTypeManager()->getStorage('user')->load(26);
+
+  $servicenow_user_lookup = \Drupal::service('servicenow.user.lookup');
+  $servicenow_user_lookup->update($account );
+  $affl = $account->get('field_service_meow_affiliations')->getValue()[1]['value'];
+  $dept = $account->get('field_user_department')->getValue()[0]['value'];
+  $sys_id = $account->get('field_service_meow_sys_id')->getValue()[0]['value'];
+  $dept_id = $account->get('field_service_meow_department_id')->getValue()[0]['value'];
+  $pod_group = $account->get('field_service_meow_dds_pod_group')->getValue()[0]['value'];
+  foreach ($user_list as $user) {
+    $this_user = user_load_by_name($user);
+    $this_user->set('field_user_name', $user);
+    $this_user->set('field_service_meow_affiliations', $affl);
+    $this_user->set('field_user_department', $dept);
+    $this_user->set('field_service_meow_sys_id', $sys_id);
+    $this_user->set('field_service_meow_department_id', $dept_id);
+    $this_user->set('field_service_meow_dds_pod_group', $pod_group);
+    $this_user->save();
+  }
+  // Pull in archived news to add to add to robots.txt.
+  \Drupal::service('oit_dev.robots');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function oit_dev_uninstall() :void {
+  unlink("../add-to-robots.txt");
+}

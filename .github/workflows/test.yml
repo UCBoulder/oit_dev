@@ -1,0 +1,12 @@
+name: (A) Tests
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  deploy:
+    uses: UCBoulder/oitid_reusable_actions/.github/workflows/testing.yml@v1
+    secrets:
+      phpstan_level: "6"
+      ralphie_token: ${{ secrets.RALPHIE_TOKEN }}
+

@@ -1,0 +1,4 @@
+services:
+  oit_dev.robots:
+    class: Drupal\oit_dev\Plugin\AddToRobots
+    arguments: ['@entity_type.manager']
