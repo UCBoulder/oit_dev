@@ -1,5 +1,5 @@
 name: 'oit_dev'
 type: module
 description: ''
-core_version_requirement: ^9.4 || ^10
+core_version_requirement: ^10 || ^11
 package: 'Development'
