@@ -39,7 +39,7 @@ class AddToRobots {
     foreach ($news_results as $news_result) {
       $news_archive_string .= "Disallow: /node/$news_result\n";
     }
-    file_put_contents('../blt/assets/robots.append.txt', $news_archive_string);
+    file_put_contents('../robo/assets/robots.append.txt', $news_archive_string);
   }
 
 }
