@@ -1,5 +1,5 @@
 name: 'oit_dev'
 type: module
-description: ''
+description: 'Dev users info updates for cypress tests.'
 core_version_requirement: ^10 || ^11
 package: 'Development'
