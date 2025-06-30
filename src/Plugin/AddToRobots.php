@@ -26,20 +26,34 @@ class AddToRobots {
     $query->condition('field_news_archive', 3);
     $query->accessCheck(FALSE);
     $news_results = $query->execute();
-    $news_archive_string = "# Paths OIT\n";
-    $news_archive_string .= "Disallow: /taxonomy/term/*\n";
-    $news_archive_string .= "Disallow: /node?page=*\n";
-    $news_archive_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=2\n";
-    $news_archive_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=3\n";
-    $news_archive_string .= "Disallow: /it-security/email-phishing/*\n";
-    $news_archive_string .= "Disallow: /services/search\n";
-    $news_archive_string .= "Disallow: /tutorial/search\n\n";
 
-    $news_archive_string .= "# Archived news nodes\n";
+    $node = $this->entityTypeManager->getStorage('node');
+    $query = $node->getQuery();
+    $query->condition('type', 'service_alert');
+    $query->condition('created', strtotime('-2 years'), '<');
+    $query->accessCheck(FALSE);
+    $sa_results = $query->execute();
+
+    $disallow_string = "# Paths OIT\n";
+    $disallow_string .= "Disallow: /taxonomy/term/*\n";
+    $disallow_string .= "Disallow: /node?page=*\n";
+    $disallow_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=2\n";
+    $disallow_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=3\n";
+    $disallow_string .= "Disallow: /it-security/email-phishing/*\n";
+    $disallow_string .= "Disallow: /services/search\n";
+    $disallow_string .= "Disallow: /tutorial/search\n\n";
+
+    $disallow_string .= "# Archived news nodes\n";
     foreach ($news_results as $news_result) {
-      $news_archive_string .= "Disallow: /node/$news_result\n";
+      $disallow_string .= "Disallow: /node/$news_result\n";
     }
-    file_put_contents('../robo/assets/robots.append.txt', $news_archive_string);
+
+    $disallow_string .= "# Service alerts over 2 years old\n";
+    foreach ($sa_results as $sa_result) {
+      $disallow_string .= "Disallow: /node/$sa_result\n";
+    }
+
+    file_put_contents('../robo/assets/robots.append.txt', $disallow_string);
   }
 
 }
