@@ -36,6 +36,7 @@ class AddToRobots {
 
     $disallow_string = "# Paths OIT\n";
     $disallow_string .= "Disallow: /taxonomy/term/*\n";
+    $disallow_string .= "Disallow: /category/*\n";
     $disallow_string .= "Disallow: /node?page=*\n";
     $disallow_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=2\n";
     $disallow_string .= "Disallow: /tutorial/hotmail-configure-outlook-windows?page=3\n";
