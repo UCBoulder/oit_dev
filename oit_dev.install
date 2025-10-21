@@ -9,6 +9,47 @@
  * Implements hook_install().
  */
 function oit_dev_install() :void {
+  $clean_table = [
+    0 => [
+      'table' => 'user__field_user_name',
+      'field' => 'field_user_name_value',
+      'value' => 'oit dev',
+    ],
+    1 => [
+      'table' => 'user__field_service_meow_affiliations',
+      'field' => 'field_service_meow_affiliations_value',
+      'value' => 'Staff-Staff',
+    ],
+    2 => [
+      'table' => 'user__field_service_meow_dds_pod_group',
+      'field' => 'field_service_meow_dds_pod_group_value',
+      'value' => '1337',
+    ],
+    3 => [
+      'table' => 'user__field_service_meow_department2id',
+      'field' => 'field_service_meow_department2id_value',
+      'value' => '1337',
+    ],
+    4 => [
+      'table' => 'user__field_service_meow_department_id',
+      'field' => 'field_service_meow_department_id_value',
+      'value' => '1337',
+    ],
+    5 => [
+      'table' => 'user__field_service_meow_sys_id',
+      'field' => 'field_service_meow_sys_id_value',
+      'value' => '1337',
+    ],
+  ];
+
+  foreach ($clean_table as $item) {
+    // For the table 'user__field_user_name' update all 'field_user_name_value' to 'oit dev' except 'entity_id' 26.
+    $query = \Drupal::database()->update($item['table'])
+      ->fields([$item['field'] => $item['value']])
+      ->condition('entity_id', 26, '<>');
+    $query->execute();
+  }
+
   $user_list = [
     'therealmeeseeks',
     'therealscaryterry',
@@ -22,8 +63,6 @@ function oit_dev_install() :void {
 
   $account = \Drupal::entityTypeManager()->getStorage('user')->load(26);
 
-  $servicenow_user_lookup = \Drupal::service('servicenow.user.lookup');
-  $servicenow_user_lookup->update($account );
   $affl = $account->get('field_service_meow_affiliations')->getValue()[1]['value'];
   $dept = $account->get('field_user_department')->getValue()[0]['value'];
   $sys_id = $account->get('field_service_meow_sys_id')->getValue()[0]['value'];
