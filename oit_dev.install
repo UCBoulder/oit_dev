@@ -51,14 +51,33 @@ function oit_dev_install() :void {
   }
 
   $user_list = [
-    'therealmeeseeks',
-    'therealscaryterry',
-    'therealbutterrobot',
-    'therealjerry',
-    'therealbeth',
-    'therealmorty',
-    'therealrick',
     'theRealSummer',
+    'therealanyaffiliate',
+    'therealassistantdean',
+    'therealassistantvc',
+    'therealassociatechairdirector',
+    'therealassociatedean',
+    'therealassociatevc',
+    'therealbeth',
+    'therealbirdperson',
+    'therealbutterrobot',
+    'therealchairdirector',
+    'therealcusystem',
+    'therealdateam',
+    'therealdean',
+    'therealemployee',
+    'therealfaculty',
+    'therealjerry',
+    'therealmeeseeks',
+    'therealmorty',
+    'therealprofessional',
+    'therealprovostchancellor',
+    'therealrick',
+    'therealscaryterry',
+    'therealspacebeth',
+    'therealstaff',
+    'therealstudentreports',
+    'therealvc',
   ];
 
   $account = \Drupal::entityTypeManager()->getStorage('user')->load(26);
@@ -87,4 +106,4 @@ function oit_dev_install() :void {
  */
 function oit_dev_uninstall() :void {
   unlink("../add-to-robots.txt");
-}
+
