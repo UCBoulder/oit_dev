@@ -88,16 +88,19 @@ function oit_dev_install() :void {
   $affl = $account->get('field_service_meow_affiliations')->getValue()[1]['value'] ?? NULL;
   $dept = $account->get('field_user_department')->getValue()[0]['value'] ?? NULL;
   $sys_id = $account->get('field_service_meow_sys_id')->getValue()[0]['value'] ?? NULL;
-  $dept_id = $account->get('field_service_meow_department_id')->getValue()[0]['value'] ?? NULL;
   $has_pod_group = $account->hasField('field_service_meow_dds_pod_group');
   $pod_group = $has_pod_group ? ($account->get('field_service_meow_dds_pod_group')->getValue()[0]['value'] ?? NULL) : NULL;
+  $has_dept_id = $account->hasField('field_service_meow_department_id');
+  $dept_id = $has_dept_id ? ($account->get('field_service_meow_department_id')->getValue()[0]['value'] ?? NULL) : NULL;
   foreach ($user_list as $user) {
     $this_user = user_load_by_name($user);
     $this_user->set('field_user_name', $user);
     $this_user->set('field_service_meow_affiliations', $affl);
     $this_user->set('field_user_department', $dept);
     $this_user->set('field_service_meow_sys_id', $sys_id);
-    $this_user->set('field_service_meow_department_id', $dept_id);
+    if ($has_dept_id) {
+      $this_user->set('field_service_meow_department_id', $dept_id);
+    }
     if ($has_pod_group) {
       $this_user->set('field_service_meow_dds_pod_group', $pod_group);
     }
