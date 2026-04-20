@@ -42,8 +42,11 @@ function oit_dev_install() :void {
     ],
   ];
 
+  $schema = \Drupal::database()->schema();
   foreach ($clean_table as $item) {
-    // For the table 'user__field_user_name' update all 'field_user_name_value' to 'oit dev' except 'entity_id' 26.
+    if (!$schema->tableExists($item['table'])) {
+      continue;
+    }
     $query = \Drupal::database()->update($item['table'])
       ->fields([$item['field'] => $item['value']])
       ->condition('entity_id', 26, '<>');
@@ -82,11 +85,12 @@ function oit_dev_install() :void {
 
   $account = \Drupal::entityTypeManager()->getStorage('user')->load(26);
 
-  $affl = $account->get('field_service_meow_affiliations')->getValue()[1]['value'];
-  $dept = $account->get('field_user_department')->getValue()[0]['value'];
-  $sys_id = $account->get('field_service_meow_sys_id')->getValue()[0]['value'];
-  $dept_id = $account->get('field_service_meow_department_id')->getValue()[0]['value'];
-  $pod_group = $account->get('field_service_meow_dds_pod_group')->getValue()[0]['value'];
+  $affl = $account->get('field_service_meow_affiliations')->getValue()[1]['value'] ?? NULL;
+  $dept = $account->get('field_user_department')->getValue()[0]['value'] ?? NULL;
+  $sys_id = $account->get('field_service_meow_sys_id')->getValue()[0]['value'] ?? NULL;
+  $dept_id = $account->get('field_service_meow_department_id')->getValue()[0]['value'] ?? NULL;
+  $has_pod_group = $account->hasField('field_service_meow_dds_pod_group');
+  $pod_group = $has_pod_group ? ($account->get('field_service_meow_dds_pod_group')->getValue()[0]['value'] ?? NULL) : NULL;
   foreach ($user_list as $user) {
     $this_user = user_load_by_name($user);
     $this_user->set('field_user_name', $user);
@@ -94,7 +98,9 @@ function oit_dev_install() :void {
     $this_user->set('field_user_department', $dept);
     $this_user->set('field_service_meow_sys_id', $sys_id);
     $this_user->set('field_service_meow_department_id', $dept_id);
-    $this_user->set('field_service_meow_dds_pod_group', $pod_group);
+    if ($has_pod_group) {
+      $this_user->set('field_service_meow_dds_pod_group', $pod_group);
+    }
     $this_user->save();
   }
   // Pull in archived news to add to add to robots.txt.
