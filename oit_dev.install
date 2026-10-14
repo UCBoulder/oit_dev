@@ -16,26 +16,21 @@ function oit_dev_install() :void {
       'value' => 'oit dev',
     ],
     1 => [
-      'table' => 'user__field_service_meow_affiliations',
-      'field' => 'field_service_meow_affiliations_value',
-      'value' => 'Staff-Staff',
-    ],
-    2 => [
       'table' => 'user__field_service_meow_dds_pod_group',
       'field' => 'field_service_meow_dds_pod_group_value',
       'value' => '1337',
     ],
-    3 => [
+    2 => [
       'table' => 'user__field_service_meow_department2id',
       'field' => 'field_service_meow_department2id_value',
       'value' => '1337',
     ],
-    4 => [
+    3 => [
       'table' => 'user__field_service_meow_department_id',
       'field' => 'field_service_meow_department_id_value',
       'value' => '1337',
     ],
-    5 => [
+    4 => [
       'table' => 'user__field_service_meow_sys_id',
       'field' => 'field_service_meow_sys_id_value',
       'value' => '1337',
@@ -85,7 +80,6 @@ function oit_dev_install() :void {
 
   $account = \Drupal::entityTypeManager()->getStorage('user')->load(26);
 
-  $affl = $account->get('field_service_meow_affiliations')->getValue()[1]['value'] ?? NULL;
   $dept = $account->get('field_user_department')->getValue()[0]['value'] ?? NULL;
   $sys_id = $account->get('field_service_meow_sys_id')->getValue()[0]['value'] ?? NULL;
   $has_pod_group = $account->hasField('field_service_meow_dds_pod_group');
@@ -95,7 +89,6 @@ function oit_dev_install() :void {
   foreach ($user_list as $user) {
     $this_user = user_load_by_name($user);
     $this_user->set('field_user_name', $user);
-    $this_user->set('field_service_meow_affiliations', $affl);
     $this_user->set('field_user_department', $dept);
     $this_user->set('field_service_meow_sys_id', $sys_id);
     if ($has_dept_id) {
@@ -106,6 +99,31 @@ function oit_dev_install() :void {
     }
     $this_user->save();
   }
+
+  // Stamp every user with a servicenow lookup_last so non-prod environments
+  // skip the ServiceNow login lookup.
+  $database = \Drupal::database();
+  $database->delete('users_data')
+    ->condition('module', 'servicenow')
+    ->condition('name', 'lookup_last')
+    ->execute();
+  $uids = $database->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->condition('uid', 0, '>')
+    ->orderBy('uid')
+    ->execute()
+    ->fetchCol();
+  $now = \Drupal::time()->getRequestTime();
+  foreach (array_chunk($uids, 1000) as $chunk) {
+    $insert = $database->insert('users_data')
+      ->fields(['module', 'name', 'uid', 'value', 'serialized']);
+    foreach ($chunk as $uid) {
+      // Order matches fields(): module, name, uid, value, serialized.
+      $insert->values(['servicenow', 'lookup_last', $uid, $now, 0]);
+    }
+    $insert->execute();
+  }
+
   // Pull in archived news to add to add to robots.txt.
   \Drupal::service('oit_dev.robots');
 }
